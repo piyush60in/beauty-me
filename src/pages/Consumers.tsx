@@ -1,3 +1,4 @@
+
 const Consumers = () => {
   const consumers = [
     {
@@ -46,19 +47,19 @@ const Consumers = () => {
 
         {/* Success Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
-          <div className="text-center">
+          <div className="text-center transform transition-transform duration-300 hover:scale-110 cursor-pointer">
             <div className="text-4xl font-bold text-purple-600 mb-2">500+</div>
             <div className="text-gray-600">Happy Clients</div>
           </div>
-          <div className="text-center">
+          <div className="text-center transform transition-transform duration-300 hover:scale-110 cursor-pointer">
             <div className="text-4xl font-bold text-purple-600 mb-2">98%</div>
             <div className="text-gray-600">Satisfaction Rate</div>
           </div>
-          <div className="text-center">
+          <div className="text-center transform transition-transform duration-300 hover:scale-110 cursor-pointer">
             <div className="text-4xl font-bold text-purple-600 mb-2">50+</div>
             <div className="text-gray-600">Countries</div>
           </div>
-          <div className="text-center">
+          <div className="text-center transform transition-transform duration-300 hover:scale-110 cursor-pointer">
             <div className="text-4xl font-bold text-purple-600 mb-2">24/7</div>
             <div className="text-gray-600">Support</div>
           </div>
@@ -102,12 +103,14 @@ const Consumers = () => {
         </div>
       </div>
       
-      <style jsx>{`
-        @keyframes rotate {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
+      <style>
+        {`
+          @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+        `}
+      </style>
     </div>
   );
 };

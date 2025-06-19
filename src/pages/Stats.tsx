@@ -1,3 +1,4 @@
+
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, AreaChart, Area } from "recharts";
 
@@ -44,22 +45,22 @@ const Stats = () => {
 
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white p-6 rounded-xl shadow-lg">
+          <div className="bg-white p-6 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-110 cursor-pointer">
             <div className="text-3xl font-bold text-purple-600 mb-2">$2.4M</div>
             <div className="text-gray-600">Total Revenue</div>
             <div className="text-green-500 text-sm mt-1">+12% from last month</div>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-lg">
+          <div className="bg-white p-6 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-110 cursor-pointer">
             <div className="text-3xl font-bold text-blue-600 mb-2">15,420</div>
             <div className="text-gray-600">Active Users</div>
             <div className="text-green-500 text-sm mt-1">+8% from last month</div>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-lg">
+          <div className="bg-white p-6 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-110 cursor-pointer">
             <div className="text-3xl font-bold text-green-600 mb-2">1,248</div>
             <div className="text-gray-600">New Customers</div>
             <div className="text-green-500 text-sm mt-1">+15% from last month</div>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-lg">
+          <div className="bg-white p-6 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-110 cursor-pointer">
             <div className="text-3xl font-bold text-orange-600 mb-2">98.5%</div>
             <div className="text-gray-600">Uptime</div>
             <div className="text-green-500 text-sm mt-1">+0.2% from last month</div>
