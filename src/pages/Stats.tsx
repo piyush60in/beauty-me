@@ -1,6 +1,5 @@
-
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, AreaChart, Area } from "recharts";
 
 const Stats = () => {
   const salesData = [
@@ -19,9 +18,20 @@ const Stats = () => {
     { name: 'Support', value: 100, color: '#F59E0B' }
   ];
 
+  const performanceData = [
+    { month: 'Jan', performance: 85, satisfaction: 90 },
+    { month: 'Feb', performance: 88, satisfaction: 92 },
+    { month: 'Mar', performance: 92, satisfaction: 89 },
+    { month: 'Apr', performance: 90, satisfaction: 94 },
+    { month: 'May', performance: 94, satisfaction: 96 },
+    { month: 'Jun', performance: 96, satisfaction: 95 }
+  ];
+
   const chartConfig = {
     sales: { label: "Sales", color: "#8B5CF6" },
-    users: { label: "Users", color: "#06B6D4" }
+    users: { label: "Users", color: "#06B6D4" },
+    performance: { label: "Performance", color: "#10B981" },
+    satisfaction: { label: "Satisfaction", color: "#F59E0B" }
   };
 
   return (
@@ -58,60 +68,85 @@ const Stats = () => {
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Bar Chart */}
-          <div className="bg-white p-6 rounded-xl shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-900 mb-6">Monthly Sales & Users</h3>
-            <ChartContainer config={chartConfig} className="h-80">
-              <BarChart data={salesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="sales" fill="var(--color-sales)" />
-                <Bar dataKey="users" fill="var(--color-users)" />
-              </BarChart>
-            </ChartContainer>
+          {/* Bar Chart with Flip Effect */}
+          <div className="bg-white p-6 rounded-xl shadow-lg relative overflow-hidden group perspective-1000">
+            <div className="transition-transform duration-700 transform-style-preserve-3d group-hover:rotate-y-180">
+              {/* Front Side - Bar Chart */}
+              <div className="backface-hidden">
+                <h3 className="text-xl font-semibold text-gray-900 mb-6">Monthly Sales & Users</h3>
+                <ChartContainer config={chartConfig} className="h-80">
+                  <BarChart data={salesData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Bar dataKey="sales" fill="var(--color-sales)" />
+                    <Bar dataKey="users" fill="var(--color-users)" />
+                  </BarChart>
+                </ChartContainer>
+              </div>
+              
+              {/* Back Side - Line Chart */}
+              <div className="absolute inset-0 backface-hidden rotate-y-180 bg-white p-6 rounded-xl">
+                <h3 className="text-xl font-semibold text-gray-900 mb-6">Growth Trend</h3>
+                <ChartContainer config={chartConfig} className="h-80">
+                  <LineChart data={salesData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Line type="monotone" dataKey="sales" stroke="var(--color-sales)" strokeWidth={3} />
+                    <Line type="monotone" dataKey="users" stroke="var(--color-users)" strokeWidth={3} />
+                  </LineChart>
+                </ChartContainer>
+              </div>
+            </div>
           </div>
 
-          {/* Line Chart */}
-          <div className="bg-white p-6 rounded-xl shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-900 mb-6">Growth Trend</h3>
-            <ChartContainer config={chartConfig} className="h-80">
-              <LineChart data={salesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Line type="monotone" dataKey="sales" stroke="var(--color-sales)" strokeWidth={3} />
-                <Line type="monotone" dataKey="users" stroke="var(--color-users)" strokeWidth={3} />
-              </LineChart>
-            </ChartContainer>
-          </div>
-        </div>
-
-        {/* Pie Chart */}
-        <div className="bg-white p-6 rounded-xl shadow-lg">
-          <h3 className="text-xl font-semibold text-gray-900 mb-6">Revenue Distribution</h3>
-          <div className="flex items-center justify-center">
-            <ResponsiveContainer width="100%" height={400}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={120}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <ChartTooltip />
-              </PieChart>
-            </ResponsiveContainer>
+          {/* Pie Chart with Flip Effect */}
+          <div className="bg-white p-6 rounded-xl shadow-lg relative overflow-hidden group perspective-1000">
+            <div className="transition-transform duration-700 transform-style-preserve-3d group-hover:rotate-y-180">
+              {/* Front Side - Pie Chart */}
+              <div className="backface-hidden">
+                <h3 className="text-xl font-semibold text-gray-900 mb-6">Revenue Distribution</h3>
+                <div className="flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height={400}>
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={120}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <ChartTooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+              
+              {/* Back Side - Area Chart */}
+              <div className="absolute inset-0 backface-hidden rotate-y-180 bg-white p-6 rounded-xl">
+                <h3 className="text-xl font-semibold text-gray-900 mb-6">Performance Metrics</h3>
+                <ChartContainer config={chartConfig} className="h-80">
+                  <AreaChart data={performanceData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Area type="monotone" dataKey="performance" stackId="1" stroke="var(--color-performance)" fill="var(--color-performance)" fillOpacity={0.6} />
+                    <Area type="monotone" dataKey="satisfaction" stackId="1" stroke="var(--color-satisfaction)" fill="var(--color-satisfaction)" fillOpacity={0.6} />
+                  </AreaChart>
+                </ChartContainer>
+              </div>
+            </div>
           </div>
         </div>
       </div>

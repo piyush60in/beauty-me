@@ -1,4 +1,3 @@
-
 const Consumers = () => {
   const consumers = [
     {
@@ -70,11 +69,16 @@ const Consumers = () => {
           {consumers.map((consumer, index) => (
             <div key={index} className="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
               <div className="flex items-center mb-6">
-                <img 
-                  src={consumer.logo} 
-                  alt={consumer.company}
-                  className="w-16 h-16 rounded-lg mr-4"
-                />
+                <div className="relative overflow-hidden rounded-lg mr-4">
+                  <img 
+                    src={consumer.logo} 
+                    alt={consumer.company}
+                    className="w-16 h-16 rounded-lg animate-bounce"
+                    style={{
+                      animation: `bounce 2s infinite ${index * 0.5}s, rotate 4s linear infinite ${index * 0.3}s`
+                    }}
+                  />
+                </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900">{consumer.company}</h3>
                   <p className="text-gray-600">{consumer.industry}</p>
@@ -97,6 +101,13 @@ const Consumers = () => {
           ))}
         </div>
       </div>
+      
+      <style jsx>{`
+        @keyframes rotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
