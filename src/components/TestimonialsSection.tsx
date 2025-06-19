@@ -1,5 +1,18 @@
 
+import { useEffect, useState } from 'react';
+
 const TestimonialsSection = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const testimonials = [
     {
       name: 'Sarah Johnson',
@@ -22,7 +35,7 @@ const TestimonialsSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-gray-900 text-white">
+    <section className="py-20 bg-gray-900 text-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">
@@ -37,14 +50,19 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial, index) => (
             <div 
               key={index}
-              className="bg-gray-800 p-8 rounded-xl shadow-lg hover:bg-gray-700 transition-colors duration-300"
+              className="bg-gray-800 p-8 rounded-xl shadow-lg hover:bg-gray-700 transition-all duration-300 group"
             >
               <div className="flex items-center mb-6">
-                <img 
-                  src={testimonial.image} 
-                  alt={testimonial.name}
-                  className="w-12 h-12 rounded-full mr-4"
-                />
+                <div className="relative overflow-hidden rounded-full mr-4">
+                  <img 
+                    src={testimonial.image} 
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full transition-transform duration-500 group-hover:scale-110"
+                    style={{
+                      transform: `translate(${(mousePosition.x - window.innerWidth / 2) * 0.01}px, ${(mousePosition.y - window.innerHeight / 2) * 0.01}px) scale(${1 + Math.sin(Date.now() * 0.001 + index) * 0.05})`
+                    }}
+                  />
+                </div>
                 <div>
                   <h4 className="font-semibold text-white">{testimonial.name}</h4>
                   <p className="text-gray-400 text-sm">{testimonial.role}</p>

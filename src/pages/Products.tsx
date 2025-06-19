@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Plus } from 'lucide-react';
 
 interface Product {
@@ -17,6 +17,7 @@ interface ProductsProps {
 
 const Products = ({ onAddToCart }: ProductsProps) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [ripples, setRipples] = useState<{ [key: number]: { x: number; y: number; id: number }[] }>({});
 
   const products: Product[] = [
     {
@@ -59,6 +60,27 @@ const Products = ({ onAddToCart }: ProductsProps) => {
     ? products 
     : products.filter(product => product.category === selectedCategory);
 
+  const createRipple = (event: React.MouseEvent, productId: number) => {
+    const card = event.currentTarget as HTMLElement;
+    const rect = card.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const rippleId = Date.now();
+
+    setRipples(prev => ({
+      ...prev,
+      [productId]: [...(prev[productId] || []), { x, y, id: rippleId }]
+    }));
+
+    // Remove ripple after animation
+    setTimeout(() => {
+      setRipples(prev => ({
+        ...prev,
+        [productId]: (prev[productId] || []).filter(r => r.id !== rippleId)
+      }));
+    }, 600);
+  };
+
   return (
     <div className="pt-16 min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -89,7 +111,26 @@ const Products = ({ onAddToCart }: ProductsProps) => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProducts.map(product => (
-            <div key={product.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <div 
+              key={product.id} 
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow relative cursor-pointer"
+              onClick={(e) => createRipple(e, product.id)}
+            >
+              {/* Ripple effects */}
+              {ripples[product.id]?.map(ripple => (
+                <span
+                  key={ripple.id}
+                  className="absolute rounded-full bg-purple-400 opacity-30 animate-ping pointer-events-none"
+                  style={{
+                    left: ripple.x - 25,
+                    top: ripple.y - 25,
+                    width: 50,
+                    height: 50,
+                    animationDuration: '0.6s'
+                  }}
+                />
+              ))}
+              
               <img 
                 src={product.image} 
                 alt={product.name}
@@ -101,7 +142,10 @@ const Products = ({ onAddToCart }: ProductsProps) => {
                 <div className="flex justify-between items-center">
                   <span className="text-2xl font-bold text-purple-600">${product.price}</span>
                   <button
-                    onClick={() => onAddToCart(product)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAddToCart(product);
+                    }}
                     className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
                   >
                     <Plus className="h-4 w-4" />
